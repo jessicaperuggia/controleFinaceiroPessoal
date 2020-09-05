@@ -11,14 +11,14 @@ const getPeriod = async (req, res) => {
     const period = req.query.peiod;
 
     if (!period) {
-        return res.status(404).send({ error: 'É necessário informar mês e ano no formato aaaa-mm' });
+        return res.status(404).send({ error: 'É necessário informar o parâmetro "period", cujo valor deve estar no formato aaaa-mm' });
     }
 
     try {
         const query = { yearMonth: period };
-        const tansactions = await TransactionModel.find(query);
+        const transactions = await TransactionModel.find(query);
 
-        res.status(200).send({ length: transactions.length, transations });
+        res.status(200).send({ length: transactions.length, transactions });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
