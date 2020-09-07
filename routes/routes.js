@@ -1,18 +1,12 @@
 const express = require('express');
 const transactionRouter = express.Router();
+const transactionService = require('../services/transactionService.js');
 
-const {
-    getPeriod,
-    create,
-    update,
-    remove,
-} = require('../services/transactionService');
+transactionRouter.post('/', transactionService.create);
+transactionRouter.get('/', transactionService.findAll);
+transactionRouter.get('/', transactionService.getPeriod);
+transactionRouter.put('/:id', transactionService.update);
+transactionRouter.delete('/:id', transactionService.remove);
 
-transactionRouter
-    .route('/')
-    .get(getPeriod)
-    .post(create)
-    .put(update)
-    .delete(remove);
 
 module.exports = transactionRouter;

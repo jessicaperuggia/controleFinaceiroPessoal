@@ -7,94 +7,85 @@ const ObjectId = mongoose.Types.ObjectId;
 // descobrir esse erro :-/
 const TransactionModel = require('../models/TransactionModel');
 
+const create = async (req, res) => {
+    const transaction = new TransactionModel({
+        description: req.body.name,
+        value: req.body.value,
+        category: req.body.category,
+        year: req.body.year,
+        month: req.body.month,
+        day: req.body.day,
+        yearMonth: req.body.yearMonth,
+        yearMonthDay: req.body.yearMonthDay,
+        type: req.body.type,
+    });
+
+    try {
+        const data = await transaction.save();
+
+        res.send(data);
+    } catch (error) {
+        res.status(500).send('Erro ao salvar a transação' + error);
+    }
+};
+
+const findAll = async (req, res) => {
+    try {
+        const data = await TransactionModel.find();
+
+        res.send(data);
+    } catch (error) {
+        res.status(500).send('Erro ao buscar todos os dados' + error);
+    }
+};
+
 const getPeriod = async (req, res) => {
-    const period = req.query.peiod;
+    const period = req.params.period;
 
     if (!period) {
-        return res.status(404).send({ error: 'É necessário informar o parâmetro "period", cujo valor deve estar no formato aaaa-mm' });
+        return res.status(404).send({ error: 'É necessário informar o period no formato aaaa-mm', });
     }
 
     try {
-        const query = { yearMonth: period };
-        const transactions = await TransactionModel.find(query);
+        const params = { yearMonth: period };
+        const transactions = await TransactionModel.find(params);
 
-        res.status(200).send({ length: transactions.length, transactions });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-const objectStructure = (objectReq) => {
-    const { description, value, category, yearMonthDay, type } = objectReq;
-    const dateResult = yearMonthDay.split('-');
-
-    const objectData = {
-        description,
-        value,
-        category,
-        type,
-        yearMonthDay,
-        yearMonth: `${dateResult[0]}-${dateResult[1]}`,
-        year: Number(dateResult[0]),
-        month: Number(dateResult[1]),
-        day: Number(dateResult[2]),
-    };
-    return objectData;
-};
-
-const create = async (req, res) => {
-    const data = objectStructure(req.body);
-    const newTransaction = new TransactionModel(data);
-    try {
-        const transaction = await newTransaction.save(newTransaction);
-        res.status(201).json(transaction);
+        res.status(200).send(transactions);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
 const update = async (req, res) => {
-    const _id = req.query._id;
-
-    if (!_id) {
-        return res.status(400).send({
-            error: 'É necessário informar o parâmetro "id"',
-        });
-    }
-
-    const updateData = objectStructure(req.body);
-    if (Object.entries(updateData).length === 0) {
-        return res.status(400).json({
-            message: 'Dados para atualização vazio',
-        });
-    }
+    const id = req.params.id;
 
     try {
-        const query = { _id };
-        const data = await TransactionModel.findByIdAndUpdate(query, updateData, {
-            new: true,
-        });
-        res.status(200).json(data);
+        const data = await TransactionModel.findByIdAndUpdate({ _id: id }, req.body, { new: true, });
+
+        if (!data) {
+            res.send('Não foi encontrada a transação id: ' + id);
+        } else {
+            res.send(data);
+        }
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).send('Erro ao atualizar a tansação id ' + id + ' ' + error);
     }
 };
 
 const remove = async (req, res) => {
-    const _id = req.query._id;
-
-    if (!_id) {
-        return res.status(400).send({
-            error: 'É necessário informar o parâmetro "id"',
-        });
-    }
+    const id = req.params.id;
 
     try {
-        await TransactionModel.deleteOne({ _id });
+        const data = await TransactionModel.findByIdAndRemove({ _id: id });
 
-        res.status(200).json({ message: 'Dados deletado!' });
+        if (!data) {
+            res.send('Não encontrada a transação id: ' + id)
+        } else {
+            res.send('Transação excluída com sucesso');
+        }
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).send('Erro ao excluir transação id: ' + id + ' ' + error)
     }
 };
 
-module.exports = { getPeriod, create, update, remove };
+module.exports = { create, findAll, getPeriod, update, remove };
