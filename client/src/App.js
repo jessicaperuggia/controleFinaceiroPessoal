@@ -13,10 +13,10 @@ export default function App() {
         <MonthPeriod />
       </div>
       <div className='row'>
-        <InputReadOnly lable='Lançmento:' />
-        <InputReadOnly lable='Receita:' color='green' />
-        <InputReadOnly lable='Despesa:' color='red' />
-        <InputReadOnly lable='Saldo:' />
+        <InputReadOnly label='Lançmento:' />
+        <InputReadOnly label='Receita:' color='green' />
+        <InputReadOnly label='Despesa:' color='red' />
+        <InputReadOnly label='Saldo:' />
       </div>
     </div>
   );
