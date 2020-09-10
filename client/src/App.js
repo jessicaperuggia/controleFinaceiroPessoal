@@ -5,6 +5,7 @@ import Spinner from './components/Spinner';
 import MonthPeriod from './components/MonthPeriod';
 import InputReadOnly from './components/InputReadOnly';
 
+
 export default function App() {
   const [allTransactions, setAllTransactions] = useState([]);
   const [selectedTransaction, setSelectedTransaction] = useState({});
