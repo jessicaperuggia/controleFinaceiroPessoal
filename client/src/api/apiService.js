@@ -15,6 +15,12 @@ async function getAllTransactions() {
     });
     return transactions;
 }
+
+async function getPeriodTransactions(transaction) {
+    const response = await axios.get(API_URL, '/period');
+    return response.data;
+}
+
 async function insertTransaction(transaction) {
     const response = await axios.post(API_URL, transaction);
     return response.data.id;
@@ -30,4 +36,4 @@ async function deleteTransaction(transaction) {
     return response.data;
 }
 
-export { getAllTransactions, insertTransaction, updateTransaction, deleteTransaction };
+export { getAllTransactions, getPeriodTransactions, insertTransaction, updateTransaction, deleteTransaction };
