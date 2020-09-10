@@ -4,6 +4,7 @@ import * as api from './api/apiService';
 import Spinner from './components/Spinner';
 import MonthPeriod from './components/MonthPeriod';
 import InputReadOnly from './components/InputReadOnly';
+import Transactions from './components/Transactions';
 
 
 export default function App() {
@@ -35,6 +36,9 @@ export default function App() {
         <InputReadOnly label='Receita:' color='green' />
         <InputReadOnly label='Despesa:' color='red' />
         <InputReadOnly label='Saldo:' />
+      </div>
+      <div>
+        <Transactions transactions={allTransactions} />
       </div>
     </div>
   );
