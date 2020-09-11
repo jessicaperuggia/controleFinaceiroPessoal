@@ -1,23 +1,20 @@
 import React from 'react'
-//import Transaction from './Transaction';
+import { formatMoney } from '../helpers/formatters';
 
 export default function Transactions({ transactions }) {
-    return (
-        <div>
-            {transactions.map((transaction) => {
-                const { id, day, category, description, value, yearMonth } = transaction;
-                let currentYearMonth = yearMonth[0];
-                if (currentYearMonth === yearMonth) {
 
-                }
+    return (
+        <div className='container'>
+            {transactions.map(({ id, day, category, description, value }) => {
                 return (
-                    <div key={id}>
-                        <div>
-                            {day} {category} {description} {value}
-                        </div>
+                    <div>
+                        <ul key={id}>
+                            <li >{day} - {category} {description} {formatMoney(value)}</li>
+                        </ul>
                     </div>
-                );
+                )
             })}
+
         </div>
-    )
+    );
 }

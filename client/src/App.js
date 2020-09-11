@@ -9,36 +9,38 @@ import Transactions from './components/Transactions';
 
 export default function App() {
   const [allTransactions, setAllTransactions] = useState([]);
-  const [selectedTransaction, setSelectedTransaction] = useState({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  //const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const getTransactions = async () => {
-      const transactions = await api.getAllTransactions();
+      let currentPeriod = '2020-09'
+      let transactions = await api.getAllPeriod(currentPeriod);
       setTimeout(() => {
         setAllTransactions(transactions);
       }, 2000);
+
     };
     getTransactions();
   }, []);
 
   return (
     <div className='container'>
-      <h1 className='center'>Controle Finaceito Pessoal</h1>
+      <h1 className='center'>Controle Finaceiro Pessoal</h1>
 
       {allTransactions.length === 0 && <Spinner />}
+      {allTransactions.length > 0 && <Transactions transactions={allTransactions} />}
 
       <div className='row'>
         <MonthPeriod />
       </div>
       <div className='row'>
-        <InputReadOnly label='Lançmento:' />
+        <InputReadOnly label='Lançamento:' />
         <InputReadOnly label='Receita:' color='green' />
         <InputReadOnly label='Despesa:' color='red' />
         <InputReadOnly label='Saldo:' />
       </div>
       <div>
-        <Transactions transactions={allTransactions} />
+
       </div>
     </div>
   );
