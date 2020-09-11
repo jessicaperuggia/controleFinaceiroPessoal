@@ -23,6 +23,7 @@ async function getAllPeriod(currentPeriod) {
             ...transaction,
             descriptionLowerCase: description.toLowerCase(),
             categoryLowerCase: category.toLowerCase(),
+            isDeleted: false,
         };
     });
     return transactions;
