@@ -5,6 +5,7 @@ import Spinner from './components/Spinner';
 import MonthPeriod from './components/MonthPeriod';
 import InputReadOnly from './components/InputReadOnly';
 import Transactions from './components/Transactions';
+import ModalTransaction from './components/ModalTransaction';
 
 
 export default function App() {
@@ -14,7 +15,7 @@ export default function App() {
 
   useEffect(() => {
     const getTransactions = async () => {
-      let currentPeriod = '2020-09'
+      let currentPeriod = '2019-11'
       let transactions = await api.getAllPeriod(currentPeriod);
       setTimeout(() => {
         setAllTransactions(transactions);
@@ -23,11 +24,14 @@ export default function App() {
     };
     getTransactions();
   }, []);
+
   const handleDelete = async (transactionDelete) => {
+
+
     const isDeleted = await api.deleteTransaction(transactionDelete);
 
     if (isDeleted) {
-      const deletedTransactionIndex = allTransactions.findIndex(
+      const deletedTransactionIndex = allTransactions.find(
         (transaction) => transaction.id === transactionDelete.id
       );
       const newTransactions = Object.assign([], allTransactions);
@@ -41,12 +45,26 @@ export default function App() {
     setIsModalOpen(true);
   };
 
+  const handleModalClose = () => {
+    setSelectTransaction(null);
+    setIsModalOpen(false);
+  };
+
+  const handleModalSave = (newTransaction, mode) => {
+    setIsModalOpen(false);
+
+    if (mode === 'insert') {
+      const postedTransaction = await api.updateTransaction(newTransaction);
+
+      let newTransactions = [...]
+    }
+  }
+
   return (
     <div className='container'>
       <h1 className='center'>Controle Finaceiro Pessoal</h1>
 
       {allTransactions.length === 0 && <Spinner />}
-      {allTransactions.length > 0 && (<Transactions transactions={allTransactions} onDelete={handleDelete} onPersist={handlePersist} />)}
 
       <div className='row'>
         <MonthPeriod />
@@ -57,6 +75,9 @@ export default function App() {
         <InputReadOnly label='Despesa:' color='red' />
         <InputReadOnly label='Saldo:' />
       </div>
+      {allTransactions.length > 0 && (<Transactions transactions={allTransactions} onDelete={handleDelete} onPersist={handlePersist} />)}
+
+      {isModalOpen && <ModalTransaction isOpen={isModalOpen} onClose={handleModalClose} onSave={handleModalSave} selectTransaction={selectTransaction} />}
       <div>
 
       </div>
