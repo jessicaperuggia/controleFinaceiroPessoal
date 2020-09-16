@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import * as api from './api/apiService';
 import Spinner from './components/Spinner';
 import MonthPeriod from './components/MonthPeriod';
-import InputReadOnly from './components/InputReadOnly';
+import InputReadOnly from './components/Summary';
 import Transactions from './components/Transactions';
 import ModalTransaction from './components/ModalTransaction';
 
