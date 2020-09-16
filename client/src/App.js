@@ -25,20 +25,12 @@ export default function App() {
     getTransactions();
   }, []);
 
-  const handleDelete = async (transactionDelete) => {
+  const handleDelete = async (id) => {
+    await api.deleteTransaction(id);
+    const newTransactions = allTransactions.filter((transaction) => transaction.id !== id);
 
+    setAllTransactions(newTransactions);
 
-    const isDeleted = await api.deleteTransaction(transactionDelete);
-
-    if (isDeleted) {
-      const deletedTransactionIndex = allTransactions.find(
-        (transaction) => transaction.id === transactionDelete.id
-      );
-      const newTransactions = Object.assign([], allTransactions);
-      newTransactions[deletedTransactionIndex].isDeleted = true;
-
-      setAllTransactions(newTransactions);
-    }
   };
   const handlePersist = (transaction) => {
     setSelectTransaction(transaction);
@@ -50,15 +42,9 @@ export default function App() {
     setIsModalOpen(false);
   };
 
-  const handleModalSave = (newTransaction, mode) => {
-    setIsModalOpen(false);
+  const handleModalSave = () => {
 
-    if (mode === 'insert') {
-      const postedTransaction = await api.updateTransaction(newTransaction);
-
-
-    }
-  }
+  };
 
   return (
     <div className='container'>
@@ -67,7 +53,7 @@ export default function App() {
       {allTransactions.length === 0 && <Spinner />}
 
       <div className='row'>
-        <MonthPeriod />
+        <MonthPeriod allPeriods={allTransactions} />
       </div>
       <div className='row'>
         <InputReadOnly label='Lançamento:' />
