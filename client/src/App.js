@@ -56,7 +56,7 @@ export default function App() {
     if (mode === 'insert') {
       const postedTransaction = await api.updateTransaction(newTransaction);
 
-      let newTransactions = [...]
+
     }
   }
 
