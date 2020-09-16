@@ -8,6 +8,7 @@ import Transactions from './components/Transactions';
 import ModalTransaction from './components/ModalTransaction';
 
 
+
 export default function App() {
   const [allTransactions, setAllTransactions] = useState([]);
   const [selectTransaction, setSelectTransaction] = useState({});
