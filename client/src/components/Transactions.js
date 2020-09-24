@@ -1,35 +1,45 @@
-import React from 'react'
-import { formatMoney } from '../helpers/formatters';
-import Action from './Action';
+import React from 'react';
+import Transaction from './Transaction';
 
-export default function Transactions({ transactions, onDelete, onPersist }) {
+export default function Transactions({ transactions, onDeleteTransaction, onEditTransaction, }) {
 
-    const handleActionClick = (id, type) => {
-        const transaction = transactions.find((transaction) => transaction.id === id);
-        if (type === 'delete') {
-            onDelete(transaction);
-            return;
-        }
-
-        onPersist(transaction);
+    const handleDelete = (id) => {
+        onDeleteTransaction(id);
     };
 
+    const handleEdit = (id) => {
+        onEditTransaction(id);
+    };
+
+    let currentDay = 1;
+
     return (
-        <div className='container'>
-            {transactions.map(({ id, day, category, description, value, isDeleted }) => {
+        <div className='center' style={styles.transactionsStyle}>
+            {transactions.map((transaction) => {
+                const { id, day } = transaction;
+
+                let differentDay = false;
+                if (day !== currentDay) {
+                    differentDay = true;
+                    currentDay = day;
+                }
+
                 return (
-                    <div key={id}>
-                        <ul>
-                            <li>
-                                {day} - {category} {description} {isDeleted ? '-' : formatMoney(value)}
-                                {<Action onActionClick={handleActionClick} id={id} type={isDeleted ? 'add' : 'edit'} />}
-                                {!isDeleted && <Action onActionClick={handleActionClick} id={id} type='delete' />}
-                            </li>
-                        </ul>
-                    </div>
+                    <Transaction
+                        key={id}
+                        transaction={transaction}
+                        onDelete={handleDelete}
+                        onEdit={handleEdit}
+                        differentDay={differentDay}
+                    />
                 );
             })}
-
         </div>
     );
 }
+
+const styles = {
+    transactionsStyle: {
+        padding: '5px',
+    },
+};

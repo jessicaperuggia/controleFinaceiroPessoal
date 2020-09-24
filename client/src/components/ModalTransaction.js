@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import css from './modalTransaction.module.css';
 
 const EARNING_COLOR = '#27ae60';
 const EXPENSE_COLOR = '#c0392b';
@@ -104,10 +103,13 @@ export default function ModalTransaction({ isOpen, selectedTransaction = null, o
         mode === 'insert' ? 'Inclusão de lançamento' : 'Edição de lançamento';
 
     const {
+        headerStyle,
+        modalStyle,
+        formStyle,
+        radioStyle,
+        radioButtonStyle,
         earningExpenseStyle,
     } = styles;
-
-    const styles = css;
 
     const earningTextStyle =
         mode === 'insert'
@@ -120,23 +122,23 @@ export default function ModalTransaction({ isOpen, selectedTransaction = null, o
             : earningExpenseStyle;
 
     return (
-        <Modal isOpen={isOpen} contentLabel='Example Modal' className={css.modalStyle} >
+        <Modal isOpen={isOpen} contentLabel='Example Modal' style={modalStyle}>
             <div>
-                <div className={css.headerStyle}>
-                    <h3 className={css.title} style={title}></h3>
+                <div style={headerStyle}>
+                    <h3 style={{ marginRight: '10px', fontWeight: 'bold' }}>{title}</h3>
 
                     <button className='waves-effect waves-light btn red darken-4' onClick={handleCloseClick}>X</button>
                 </div>
 
                 <form onSubmit={handleFormSubmit}>
-                    <div className={css.formStyle}>
-                        <div className={css.radioStyle}>
-                            <label className={css.radioButtonStyle}>
+                    <div style={formStyle}>
+                        <div style={radioStyle}>
+                            <label style={{ ...radioButtonStyle }}>
                                 <input name='expense-earning' type='radio' value='-' checked={type === '-'} onChange={handleTypeChange} disabled={mode !== 'insert'} />
                                 <span style={expenseTextStyle}>Despesa</span>
                             </label>
 
-                            <label className={css.radioButtonStyle}>
+                            <label style={radioButtonStyle}>
                                 <input name='expense-earning' type='radio' value='+' checked={type === '+'} onChange={handleTypeChange} disabled={mode !== 'insert'} />
                                 <span style={earningTextStyle}>Receita</span>
                             </label>
@@ -152,17 +154,63 @@ export default function ModalTransaction({ isOpen, selectedTransaction = null, o
                             <label htmlFor='inputCategory' className='active'>Categoria:</label>
                         </div>
 
-                        <div className={css.headerStyle}>
-                            <div className='input-field' style={{ marginRight: '10px' }} >
+                        <div style={headerStyle}>
+                            <div className='input-field' style={{ marginRight: '10px' }}>
                                 <input id='inputValue' type='number' min='0' step='0.01' value={value} onChange={handleValueChange} required />
                                 <label htmlFor='inputValue' className='active'>Valor:</label>
                             </div>
                             <input placeholder='Data' type='date' className='browser-default' value={date} onChange={handleDateChange} required />
                         </div>
                     </div>
-                    <input type='submit' className='waves-effect waves-light btn' value='Salvar' disabled={!canSave} />
+                    <input type='submit' className='waves-effect waves-light btn' value='Salvar' disabled={!canSave()} />
                 </form>
             </div>
         </Modal>
     );
 }
+
+const styles = {
+    modalStyle: {
+        content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+        },
+    },
+
+    headerStyle: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+
+    formStyle: {
+        border: '1px solid lightgrey',
+        borderRadius: '4px',
+        padding: '10px',
+        marginBottom: '10px',
+    },
+
+    radioStyle: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: '30px',
+    },
+
+    radioButtonStyle: {
+        marginRight: '10px',
+        marginLeft: '10px',
+        padding: '20px',
+    },
+
+    earningExpenseStyle: {
+        fontSize: '1.2rem',
+        fontWeight: 'bold',
+    },
+};

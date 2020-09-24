@@ -1,13 +1,22 @@
 import React from 'react';
-import css from './actions.module.css';
 
-export default function Action({ id, type, onActionClick }) {
+export default function Action({ type, onActionClick }) {
+    const { actionStyle } = styles;
+
     const handleIconClick = () => {
-        onActionClick(id, type);
+        onActionClick(type);
     }
     return (
-        <span className={css.actionStyle} className='material-icons' onClick={handleIconClick}>
+        <span style={actionStyle} className='material-icons' onClick={handleIconClick}>
             {type}
         </span>
     );
 }
+
+const styles = {
+    actionStyle: {
+        fontSize: '1.2rem',
+        cursor: 'pointer',
+        marginRight: '10px',
+    },
+};
